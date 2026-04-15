@@ -4,7 +4,7 @@ package relationaldbs.test;
 import relationaldbs.user;
 import relationaldbs.dao.UserDao;
 
-public class UserDaoImpl {
+public class UserDaoImpl implements UserDao {
 	public static void main(String[] args) {
 		//insert test
 		UserDao userDao =  (UserDao) new UserDaoImpl();

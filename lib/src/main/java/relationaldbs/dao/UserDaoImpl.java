@@ -35,6 +35,14 @@ public class UserDaoImpl implements UserDao {
 		
 		
 		
+
+		
+		
+		
+		
+		
+		
+		
 		
 		try (Connection conn = DriverManager.getConnection(postgresqlURL, username, password);
 				PreparedStatement pStatement = conn.prepareStatement(insertSQL)) {
@@ -43,9 +51,13 @@ public class UserDaoImpl implements UserDao {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			
-			PreparedStatement ps =
+			
+			
+
+			
+			
 					
-			ps.setString(1, user.getName());
+			
 					
 			
 			
