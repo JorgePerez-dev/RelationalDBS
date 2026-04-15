@@ -37,3 +37,16 @@ build/
 
 ### Mac OS ###
 .DS_Store
+
+
+# Compiled Java files
+*.class
+
+# Eclipse output folders
+bin/
+lib/bin/
+
+# Common build dirs
+target/
+build/
+
