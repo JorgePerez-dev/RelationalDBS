@@ -39,6 +39,8 @@ public interface UserDao {
 		
 	
 	public List<user> findall();
+
+	List<user> findAll();
 		
 	}
 		

@@ -8,78 +8,121 @@ import java.sql.SQLException;
 
 public class DBConnection {
 
-    private final static String postgresqlURL = "jdbc:postgresql://localhost:5432/postgres";
-    // "jdbc:postgresql://192.168.1.170.5432/sample?ssl=true";
-    private static String username = "postgres";
-    private static String password = "Admin";
+    private static final String URL = "jdbc:postgresql://localhost:5432/postgres";
+    private static final String USER = "postgres";
+    private static final String PASSWORD = "Admin";
 
-    public static void main(String[] args) {
-        try {
-            Connection conn = DriverManager.getConnection(postgresqlURL, username, password);
-            System.out.println("the address of the connection object is" + conn);
+    // 🔹 CONEXIÓN
+    public static Connection getConnection() throws SQLException {
+        return DriverManager.getConnection(URL, USER, PASSWORD);
+    }
 
-            createDatabase(conn);
-            String dropTableSQL = "drop table if exists users";
-            PreparedStatement ps = conn.prepareStatement(dropTableSQL);
+    // 🔹 CREAR TABLA
+    public static void createTable() {
+        String sql = "CREATE TABLE IF NOT EXISTS users ("
+                + "id SERIAL PRIMARY KEY, "
+                + "name VARCHAR(100), "
+                + "password VARCHAR(100), "
+                + "age INTEGER, " // ✅ 
+                + "email VARCHAR(100), "
+                + "phone VARCHAR(50), "
+                + "address VARCHAR(100), "
+                + "city VARCHAR(100), "
+                + "country VARCHAR(100), "
+                + "balance NUMERIC"
+                + ")";
+
+        try (Connection conn = getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
             ps.executeUpdate();
-            ps.close();
-            // table creation sql
-            String createTableSQL = "create table if not exists users(" + "id integer not null,"
-                    + "usenname VARCHAR(255), " + "psw VARCHAR(255)," + "isVIP boolean," + "balance numeric,"
-                    + "PRIMARY KEY (id)" + ")";
-            PreparedStatement ps1 = conn.prepareStatement(createTableSQL);
-            ps1.executeUpdate();
-            ps1.close();
-            // insert sal
-            String insertSQL = "insert into users(id,usenname,psw, isVIP, balance) values ('19','Pablo',1243,true,224.5),('20','Jorge','121',false,234.9)";
-
-            PreparedStatement ps11 = conn.prepareStatement(insertSQL);
-            System.out.println(ps11.executeUpdate());
-            ps11.close();
-            // delete sal
-
-            selectByName(conn, "Pablo");
-
-
-
-
-
-            deleteByName( conn, "Jorge" );
 
         } catch (SQLException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
-
     }
 
-    private static void selectByName(Connection conn, String name ) throws SQLException {
-        // TODO Auto-generated method stub
-        String selectSQL = "select * from users where usenname =" + name;
-        PreparedStatement ps3 = conn.prepareStatement(selectSQL);
-        System.out.println();
-        ResultSet rs = ps3.executeQuery();
+    // 🔹 INSERT
+    public static void insertUser(String name, String password, String email,
+                                  String phone, String address, String city,
+                                  String country, double balance) {
 
-    }
+        String sql = "INSERT INTO users (name, password, age, email, phone, address, city, country, balance) "
+                   + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
-    private static void deleteByName(Connection conn, String name) throws SQLException {
-        // TODO Auto-generated method stub
-        String deleteSQL = "DELETE FROM users WHERE usenname = "+ name;
-        // select psw, isVIP from users where username = 'Manolo' ;
-        PreparedStatement ps2 = conn.prepareStatement(deleteSQL);
-        System.out.println(ps2.executeUpdate());
-        ps2.close();
-    }
+        try (Connection conn = getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
 
-    private static void createDatabase(Connection conn) {
-        // TODO Auto-generated method stub
-        try {
-            String dbCreationSQL = "CREATE DATABASE  ";
-            PreparedStatement ps = conn.prepareStatement(dbCreationSQL);
+            ps.setString(1, name);
+            ps.setString(2, password);
+            ps.setString(4, email);
+            ps.setString(5, phone);
+            ps.setString(6, address);
+            ps.setString(7, city);
+            ps.setString(8, country);
+            ps.setDouble(9, balance);
+
             ps.executeUpdate();
-        } catch (Exception e) {
+
+        } catch (SQLException e) {
             e.printStackTrace();
-            // TODO: handle exception
         }
+    }
+
+    // 🔹 SELECT TODOS
+    public static void getUsers() {
+        String sql = "SELECT * FROM users";
+
+        try (Connection conn = getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+
+            while (rs.next()) {
+                System.out.println(
+                        rs.getInt("id") + " - " +
+                        rs.getString("name") + " - " +
+                        rs.getString("email") + " - " +
+                        rs.getDouble("balance")
+                );
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    // 🔹 DELETE POR ID
+    public static void deleteUser(int id) {
+        String sql = "DELETE FROM users WHERE id = ?";
+
+        try (Connection conn = getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setInt(1, id);
+            ps.executeUpdate();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    // 🔹 MAIN DE PRUEBA
+    public static void main(String[] args) {
+
+        createTable();
+
+        insertUser("Jorge", "1234", "jorge@mail.com",
+                "666666", "Calle 1", "Madrid", "España", 100);
+
+        insertUser("Ana", "abcd", "ana@mail.com",
+                "777777", "Calle 2", "Sevilla", "España", 200);
+
+        System.out.println("USUARIOS:");
+        getUsers();
+
+        deleteUser(1);
+
+        System.out.println("DESPUÉS DE BORRAR:");
+        getUsers();
     }
 }
