@@ -25,6 +25,13 @@ public class userdaoTest {
         dao.insert(u2);
 
         System.out.println("Usuarios insertados ");
+        
+        
+        
+        
+        
+        
+        
        
     }
 }
