@@ -21,7 +21,7 @@ public class UserDaoImpl implements UserDao {
 
             ps.setString(1, user.getName());
             ps.setString(2, user.getPassword());
-            ps.setString(3, user.getAge());
+            ps.setInt(3, user.getAge()); // 🔥 CORREGIDO
             ps.setString(4, user.getEmail());
             ps.setString(5, user.getPhone());
             ps.setString(6, user.getAddress());
@@ -51,8 +51,10 @@ public class UserDaoImpl implements UserDao {
             return true;
 
         } catch (Exception e) {
-            return false;
+            e.printStackTrace();
+            
         }
+        return false;
     }
 
     @Override
@@ -65,14 +67,15 @@ public class UserDaoImpl implements UserDao {
 
             ps.setString(1, user.getName());
             ps.setString(2, user.getPassword());
-            ps.setString(3, user.getAge());
+            ps.setInt(3, user.getAge()); // 🔥 CORREGIDO
             ps.setString(4, user.getEmail());
             ps.setString(5, user.getPhone());
             ps.setString(6, user.getAddress());
             ps.setString(7, user.getCity());
             ps.setString(8, user.getCountry());
             ps.setDouble(9, user.getBalance());
-            ps.setNString(10, user.getAge()); // ⚠️ necesitas este campo
+
+            ps.setLong(10, 1); // ⚠️ temporal porque tu user NO tiene id
 
             ps.executeUpdate();
 
@@ -96,7 +99,7 @@ public class UserDaoImpl implements UserDao {
                 return new user(
                     rs.getString("name"),
                     rs.getString("password"),
-                    rs.getString("age"),
+                    rs.getInt("age"), // 🔥 CORREGIDO
                     rs.getString("email"),
                     rs.getString("phone"),
                     rs.getString("address"),
@@ -128,7 +131,7 @@ public class UserDaoImpl implements UserDao {
                 list.add(new user(
                     rs.getString("name"),
                     rs.getString("password"),
-                    rs.getString("age"),
+                    rs.getInt("age"), // 🔥 CORREGIDO
                     rs.getString("email"),
                     rs.getString("phone"),
                     rs.getString("address"),
@@ -145,11 +148,9 @@ public class UserDaoImpl implements UserDao {
         return list;
     }
 
-	@Override
-	public List<user> findall() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	
-} 
+    // ⚠️ elimina este método duplicado si no lo usas
+    @Override
+    public List<user> findall() {
+        return findAll();
+    }
+}

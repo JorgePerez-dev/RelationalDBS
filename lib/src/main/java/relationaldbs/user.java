@@ -5,7 +5,7 @@ public class user {
     // Fields
     private String name;
     private String password;
-    private String age;
+    private int age;
     private String email;
     private String phone;
     private String address;
@@ -14,25 +14,26 @@ public class user {
     private double balance;
 
     // CONSTRUCTOR
-    public user(String name, String password, String string, String email,
-                String phone, String address, String city, String country, double balance) {
+    public user(String name, String password, int age, String email,
+            String phone, String address, String city, String country, double balance) {
 
-        this.name = name;
-        this.password = password;
-        this.age = string;
-        this.email = email;
-        this.phone = phone;
-        this.address = address;
-        this.city = city;
-        this.country = country;
-        this.balance = balance;
-    }
+    this.name = name;
+    this.password = password;
+    this.age = age;
+    this.email = email;
+    this.phone = phone;
+    this.address = address;
+    this.city = city;
+    this.country = country;
+    this.balance = balance;
+}
+    
 
     // GETTERS
 
     public String getName() { return name; }
     public String getPassword() { return password; }
-    public String getAge() { return age; }
+    public int getAge() { return age; }
     public String getEmail() { return email; }
     public String getPhone() { return phone; }
     public String getAddress() { return address; }

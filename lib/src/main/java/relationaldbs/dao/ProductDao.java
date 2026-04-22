@@ -1,6 +1,9 @@
-import relationaldbs.Car;
+package relationaldbs.dao;
+
 
 import java.util.List;
+
+import relationaldbs.Car;
 
 public interface ProductDao {
 
